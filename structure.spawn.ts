@@ -23,13 +23,13 @@ export default {
 				console.log('Spawning new harvester: ' + newName);
 			}
 		}
-		if(upgraders < 2) {
+		if(upgraders < 2 && harvesters > 0) {
 			let newName = 'Upgrader' + Game.time;
 			if(spawn.spawnCreep([WORK,CARRY,MOVE], newName, {memory: {role: 'upgrader'}}) == 0) {
 				console.log('Spawning new upgrader: ' + newName);
 			}
 		}
-		if(builders < 2) {
+		if(builders < 2 && spawn.room.controller.level >= 2) {
 			let newName = 'Builder' + Game.time;
 			if(spawn.spawnCreep([WORK,CARRY,MOVE], newName, {memory: {role: 'builder'}}) == 0) {
 				console.log('Spawning new builder: ' + newName);
@@ -43,6 +43,39 @@ export default {
 				spawn.pos.x + 1,
 				spawn.pos.y,
 				{align: 'left', opacity: 0.8});
+		}
+	},
+	updateSources: function(spawn: StructureSpawn) {
+		let room = spawn.room;
+		let terrain = room.getTerrain();
+		let sources = room.find(FIND_SOURCES);
+		if(room.memory.sources == undefined) {
+			room.memory.sources = {};
+			let roomSources = room.memory.sources;
+			for(let i = 0; i < sources.length; i++) {
+				let source = sources[i];
+				roomSources[source.id] = {}
+				for(let i = -1; i <= 1; i++) {
+					for(let j = -1; j <= 1; j++) {
+						if(i == 0 && j == 0) {
+							continue;
+						}
+						let x = source.pos.x + i;
+						let y = source.pos.y + j;
+						let position = room.getPositionAt(x, y);
+						let pathTo = Room.serializePath(spawn.pos.findPathTo(position));
+						let pathBack = Room.serializePath(position.findPathTo(spawn.pos));
+						if(terrain.get(x, y) != TERRAIN_MASK_WALL) {
+							roomSources[source.id]['' + x + ',' + y] = {
+								x: x,
+								y: y,
+								pathTo: pathTo,
+								pathBack: pathBack
+							};
+						}
+					}
+				}
+			}
 		}
 	}
 }

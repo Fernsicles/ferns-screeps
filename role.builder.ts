@@ -5,12 +5,26 @@ export default {
 			creep.memory.build = false;
 		}
 		if(creep.memory.build) {
-			let targets = creep.room.find(FIND_MY_CONSTRUCTION_SITES);
-			let error = creep.build(targets[0]);
-			if(error == ERR_NOT_ENOUGH_RESOURCES) {
-				creep.memory.build = false;
-			} else if(error == ERR_NOT_IN_RANGE) {
-				creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}, range: 3});
+			let target = creep.pos.findClosestByPath(FIND_MY_CONSTRUCTION_SITES);
+			if(target == null) {
+				let damaged = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+					filter: (structure: OwnedStructure | StructureRoad) => {
+						return (structure.structureType == STRUCTURE_ROAD ||structure.my) && structure.hits < structure.hitsMax;
+					}
+				});
+				let error = creep.repair(damaged);
+				if(error == ERR_NOT_ENOUGH_RESOURCES) {
+					creep.memory.build = false;
+				} else if(error == ERR_NOT_IN_RANGE) {
+					creep.moveTo(damaged, {visualizePathStyle: {stroke: '#ffffff'}, range: 3});
+				}
+			} else {
+				let error = creep.build(target[0]);
+				if(error == ERR_NOT_ENOUGH_RESOURCES) {
+					creep.memory.build = false;
+				} else if(error == ERR_NOT_IN_RANGE) {
+					creep.moveTo(target[0], {visualizePathStyle: {stroke: '#ffffff'}, range: 3});
+				}
 			}
 		} else {
 			let sources = creep.room.find(FIND_SOURCES);

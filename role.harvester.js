@@ -16,8 +16,7 @@ exports["default"] = {
                         return false;
                     }
                     var x = structure.store.getFreeCapacity(RESOURCE_ENERGY);
-                    return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
-                        x > 0;
+                    return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) && x > 0;
                 }
             });
             if (targets.length > 0) {
