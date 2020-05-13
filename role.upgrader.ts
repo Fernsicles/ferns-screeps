@@ -1,7 +1,6 @@
 import './interfaces';
 export default {
 	run: function(creep: Creep) {
-
         if(creep.memory.upgrading && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.upgrading = false;
             creep.say('🔄 harvest');

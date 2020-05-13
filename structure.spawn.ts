@@ -77,5 +77,8 @@ export default {
 				}
 			}
 		}
+	},
+	createStructures: function(spawn: StructureSpawn) {
+		
 	}
 }
