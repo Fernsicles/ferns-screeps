@@ -33,6 +33,7 @@ module.exports.loop = function() {
 			if(spawn.room.controller.level >= 2) {
 				structure_spawn.createStructures(spawn);
 				structure_controller.buildExtensions(spawn.room.controller);
+				structure_controller.createContainers(spawn.room.controller);
 			}
 		}
 	}

@@ -21,6 +21,18 @@ let self = {
 				creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
 			}
 		}
+	},
+	containerWithdraw(creep: Creep) {
+		let container: Structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {filter: (structure: StructureContainer) => {
+			return structure.structureType == STRUCTURE_CONTAINER && structure.store.getUsedCapacity() > 0;
+		}});
+		if(container == null) {
+			return false;
+		}
+		if(creep.transfer(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+			creep.moveTo(container, {visualizePathStyle: {stroke: '#ffffff'}});
+		}
+		return true;
 	}
 };
 export default self;

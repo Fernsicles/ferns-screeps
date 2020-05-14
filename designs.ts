@@ -18,11 +18,10 @@ export default {
 				if(structure != null && pos.lookFor(LOOK_FLAGS).length == 0) {
 					let error = pos.createConstructionSite(structure);
 					if(error == ERR_RCL_NOT_ENOUGH && pos.lookFor(LOOK_STRUCTURES).length == 0 && pos.lookFor(LOOK_CONSTRUCTION_SITES).length == 0) {
-						let flagError = pos.createFlag('build;' + structure + ';' + Game.time);
+						pos.createFlag('build;' + structure + ';' + Game.time);
 					}
 				}
 			}
 		}
-		return OK;
 	}
 };

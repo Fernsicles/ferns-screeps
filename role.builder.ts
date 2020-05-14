@@ -1,4 +1,4 @@
-import './defines'
+import './defines';
 export default {
 	run: function(creep: Creep) {
 		if(creep.memory.build == undefined) {
@@ -9,7 +9,7 @@ export default {
 			if(target == null) {
 				let damaged = creep.pos.findClosestByPath(FIND_STRUCTURES, {
 					filter: (structure: OwnedStructure | StructureRoad) => {
-						return (structure.structureType == STRUCTURE_ROAD ||structure.my) && structure.hits < structure.hitsMax;
+						return (structure.structureType == STRUCTURE_ROAD || structure.my) && structure.hits < structure.hitsMax;
 					}
 				});
 				let error = creep.repair(damaged);
@@ -35,4 +35,4 @@ export default {
 			}
 		}
 	}
-}
+};

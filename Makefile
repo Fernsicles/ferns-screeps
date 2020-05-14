@@ -1,4 +1,4 @@
-all: main.js role.harvester.js role.upgrader.js role.builder.js structure.spawn.js structure.controller.js designs.js
+all: *.js
 
 main.js: main.ts
 	tsc main.ts

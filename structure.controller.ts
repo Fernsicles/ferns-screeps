@@ -22,6 +22,17 @@ let self = {
 	},
 	findBase(controller: StructureController) {
 
+	},
+	createContainers(controller: StructureController) {
+		let room: Room = controller.room;
+		let sources = room.memory.sources;
+		for(let source in sources) {
+			for(let spotName in sources[source]) {
+				let spot = sources[source][spotName];
+				let pos: RoomPosition = room.getPositionAt(spot.x, spot.y);
+				pos.createConstructionSite(STRUCTURE_CONTAINER);
+			}
+		}
 	}
 };
 export default self;

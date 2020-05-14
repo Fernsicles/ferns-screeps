@@ -4,7 +4,9 @@ enum CreepWorker {
 	HARVESTER = 'harvester',
 	UPGRADER = 'upgrader',
 	BUILDER = 'builder',
-	REPAIRER = 'repairer'
+	REPAIRER = 'repairer',
+	MINER = 'miner',
+	HAULER = 'hauler'
 }
 
 let self = {
@@ -13,6 +15,7 @@ let self = {
 		let harvesters = 0;
 		let upgraders = 0;
 		let builders = 0;
+		let miners = 0;
 		for(let creepName in creeps) {
 			let role = creeps[creepName].memory.role;
 			if(role == 'harvester') {
@@ -21,6 +24,8 @@ let self = {
 				upgraders++;
 			} else if(role == 'builder') {
 				builders++;
+			} else if(role == 'miner') {
+				miners++;
 			}
 		}
 
@@ -136,7 +141,7 @@ let self = {
 		let role = CreepWorker.UPGRADER;
 		let parts = [];
 		let cost = 0;
-		for(let i = 100; i < capacity * 3 / 6; i += 100) {
+		for(let i = 100; i <= capacity * 3 / 6; i += 100) {
 			parts.push(WORK);
 			cost += 100;
 			if(!(i + 50 > capacity * 3 / 5)) {
@@ -146,9 +151,41 @@ let self = {
 			}
 		}
 		capacity -= cost;
-		for(let i = 50; i < capacity; i += 50) {
+		for(let i = 50; i <= capacity; i += 50) {
 			parts.push(CARRY);
 			if(i % 100 == 0) {
+				parts.push(MOVE);
+				i += 50;
+			}
+		}
+		let newName = role + Game.time;
+		if(spawn.spawnCreep(parts, newName, {memory: {role: role}}) == 0) {
+			console.log('Spawning new ' + role + ': ' + newName);
+		}
+	},
+	createMiner(spawn: StructureSpawn) {
+		let capacity = spawn.room.energyCapacityAvailable;
+		let role = CreepWorker.MINER;
+		let parts = [];
+		for(let i = 100; i <= capacity; i += 100) {
+			parts.push(WORK);
+			if(i % 100 != 0) {
+				parts.push(MOVE);
+				i += 50;
+			}
+		}
+		let newName = role + Game.time;
+		if(spawn.spawnCreep(parts, newName, {memory: {role: role}}) == 0) {
+			console.log('Spawning new ' + role + ': ' + newName);
+		}
+	},
+	createHauler(spawn: StructureSpawn) {
+		let capacity = spawn.room.energyCapacityAvailable;
+		let role = CreepWorker.HAULER;
+		let parts = [];
+		for(let i = 50; i <= capacity; i += 50) {
+			parts.push(CARRY);
+			if(i % 50 == 0) {
 				parts.push(MOVE);
 				i += 50;
 			}
